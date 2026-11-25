@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="rw">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BiZence Vault - Kuzigama mu Kigo cy'Imari</title>
+  <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { margin: 0; background: #f1f5f9; color: #1e293b; }
+    header {
+      background: linear-gradient(135deg, #0f172a, #1e3a8a);
+      color: #fff;
+      padding: 18px 16px;
+      text-align: center;
+    }
+    header h1 { margin: 0; font-size: 22px; letter-spacing: 0.5px; }
+    header p { margin: 5px 0 0; font-size: 13px; color: #cbd5e1; }
+    .container { max-width: 480px; margin: 16px auto; padding: 0 14px 40px; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    h2 { margin-top: 0; font-size: 18px; color: #1e3a8a; }
+    label { display: block; font-size: 13px; font-weight: bold; margin-top: 10px; margin-bottom: 4px; }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .terms-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .terms-box input { width: auto; margin-top: 3px; }
+    button {
+      width: 100%;
+      margin-top: 14px;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #1e3a8a;
+      color: #fff;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover { background: #172554; }
+    .btn-secondary { background: #475569; margin-top: 8px; }
+    .summary {
+      background: #eff6ff;
+      border-left: 4px solid #1e3a8a;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    .summary p { margin: 6px 0; }
+    .hidden { display: none; }
+    .badge {
+      display: inline-block;
+      background: #dcfce7;
+      color: #166534;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .saving-item {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 13px;
+      background: #f8fafc;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .tab-btn {
+      flex: 1;
+      margin-top: 0;
+      padding: 10px;
+      font-size: 13px;
+      background: #cbd5e1;
+      color: #1e293b;
+    }
+    .tab-btn.active {
+      background: #1e3a8a;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>BiZence Vault</h1>
+  <p>Uburyo bugezweho bwo kuzigama mu bigo by'imari</p>
+</header>
+
+<div class="container">
+
+  <!-- IGICE 1: KWIYANDIKISHA / KWINJIRA -->
+  <div class="card" id="authSection">
+    <h2>Kwiyandikisha muri BiZence Vault</h2>
+    <form id="registerForm">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="urugero@email.com" required />
+
+      <label for="phone">Numero ya Telefoni</label>
+      <input type="tel" id="phone" placeholder="078XXXXXXXX" required />
+
+      <label for="nationalId">Nomero y'Irangamuntu (ID)</label>
+      <input type="text" id="nationalId" placeholder="1199XXXXXXXXXXXX" required />
+
+      <div class="terms-box">
+        <input type="checkbox" id="acceptTerms" required />
+        <label for="acceptTerms" style="margin:0; font-weight:normal;">
+          Nemeye amategeko n'amabwiriza ya <strong>BiZence Vault</strong> n'ikigo cy'imari ku bijyanye no kuzigama no kubikuza ku gihe cyagenwe.
+        </label>
+      </div>
+
+      <button type="submit">Emeza kandi Winjire</button>
+    </form>
+  </div>
+
+  <!-- IGICE 2: DASHBOARD (UMUKIRIYA & IKIGO CY'IMARI) -->
+  <div class="hidden" id="dashboardSection">
+
+    <div class="tabs">
+      <button type="button" class="tab-btn active" id="clientTabBtn">Umukiriya (Client)</button>
+      <button type="button" class="tab-btn" id="adminTabBtn">Ikigo cy'Imari (Admin)</button>
+    </div>
+
+    <!-- VIEW Y'UMUKIRIYA -->
+    <div id="clientView">
+      <div class="card">
+        <div class="badge">Konti yemewe</div>
+        <h2>Dashboard ya BiZence Vault</h2>
+        <p id="userInfo" style="font-size:13px; color:#475569;"></p>
+
+        <p style="font-size:13px; color:#1e3a8a; font-weight:bold;">
+          Igipimo cy'inyungu gitangwa n'ikigo: <span id="displayRate">1</span>% ku cyumweru
+        </p>
+
+        <label for="amount">Ingano y'amafaranga ubikije (FRW)</label>
+        <input type="number" id="amount" min="1000" step="500" placeholder="Urugero: 50000" />
+
+        <label for="months">Igihe uzabikamo (Amezi)</label>
+        <input type="number" id="months" min="1" max="60" value="2" />
+
+        <div class="summary">
+          <p><strong>Amafaranga abikijwe:</strong> <span id="outPrincipal">0 FRW</span></p>
+          <p><strong>Igihe (mu byumweru):</strong> <span id="outWeeks">0</span></p>
+          <p><strong>Inyungu iteganyijwe:</strong> <span id="outInterest">0 FRW</span></p>
+          <p><strong>Igiteranyo kizabikuzwa:</strong> <span id="outTotal">0 FRW</span></p>
+        </div>
+
+        <div class="terms-box">
+          <input type="checkbox" id="confirmLock" />
+          <label for="confirmLock" style="margin:0; font-weight:normal;">
+            Ndemeza ko ngiye kubika aya mafaranga muri BiZence Vault mu gihe cyavuzwe haruguru.
+          </label>
+        </div>
+
+        <button type="button" id="saveBtn">Emeza Ububiko (Confirm)</button>
+        <button type="button" class="btn-secondary" id="logoutBtn">Sohoka (Logout)</button>
+      </div>
+
+      <div class="card">
+        <h2>Ububiko Bwanjye</h2>
+        <div id="savingsList">
+          <p style="font-size:13px; color:#64748b;">Nta bubiko burakorwa.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW Y'IKIGO CY'IMARI (ADMIN) -->
+    <div id="adminView" class="hidden">
+      <div class="card">
+        <h2>Igenamiterere ry'Ikigo cy'Imari</h2>
+        <p style="font-size:13px; color:#475569;">
+          Aha ikigo cy'imari ni ho kigena inyungu kigenera abakiriya bakoresha BiZence Vault.
+        </p>
+        <label for="institutionName">Izina ry'Ikigo cy'Imari</label>
+        <input type="text" id="institutionName" placeholder="Urugero: Umurenge SACCO / Microfinance" />
+
+        <label for="adminRateInput">Igipimo cy'inyungu (% ku cyumweru)</label>
+        <input type="number" id="adminRateInput" step="0.1" min="0" value="1" />
+
+        <button type="button" id="updateSettingsBtn">Bika Impinduka z'Ikigo</button>
+      </div>
+
+      <div class="card">
+        <h2>Raporo y'Ububiko bw'Abakiriya</h2>
+        <div id="adminReport"></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  const authSection = document.getElementById("authSection");
+  const dashboardSection = document.getElementById("dashboardSection");
+  const registerForm = document.getElementById("registerForm");
+  const userInfo = document.getElementById("userInfo");
+
+  const clientTabBtn = document.getElementById("clientTabBtn");
+  const adminTabBtn = document.getElementById("adminTabBtn");
+  const clientView = document.getElementById("clientView");
+  const adminView = document.getElementById("adminView");
+
+  const amountInput = document.getElementById("amount");
+  const monthsInput = document.getElementById("months");
+  const confirmLock = document.getElementById("confirmLock");
+  const saveBtn = document.getElementById("saveBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const savingsList = document.getElementById("savingsList");
+
+  const institutionNameInput = document.getElementById("institutionName");
+  const adminRateInput = document.getElementById("adminRateInput");
+  const updateSettingsBtn = document.getElementById("updateSettingsBtn");
+  const adminReport = document.getElementById("adminReport");
+
+  function getSettings() {
+    return JSON.parse(localStorage.getItem("bizence_vault_settings") || '{"name":"Ikigo cy\'Imari","weeklyRate":1}');
+  }
+
+  function formatFRW(num) {
+    return Math.round(num).toLocaleString("en-US") + " FRW";
+  }
+
+  function calculatePreview() {
+    const settings = getSettings();
+    document.getElementById("displayRate").textContent = settings.weeklyRate;
+
+    const principal = parseFloat(amountInput.value) || 0;
+    const months = parseFloat(monthsInput.value) || 0;
+    const ratePerWeek = (parseFloat(settings.weeklyRate) || 0) / 100;
+
+    const weeks = Math.round(months * 4);
+    const interest = principal * ratePerWeek * weeks;
+    const total = principal + interest;
+
+    document.getElementById("outPrincipal").textContent = formatFRW(principal);
+    document.getElementById("outWeeks").textContent = weeks + " weeks";
+    document.getElementById("outInterest").textContent = formatFRW(interest);
+    document.getElementById("outTotal").textContent = formatFRW(total);
+
+    return { principal, months, weeks, interest, total };
+  }
+
+  [amountInput, monthsInput].forEach(el => {
+    el.addEventListener("input", calculatePreview);
+  });
+
+  function renderDashboard(user) {
+    authSection.classList.add("hidden");
+    dashboardSection.classList.remove("hidden");
+    const settings = getSettings();
+    userInfo.textContent = `Ikigo: ${settings.name} | Email: ${user.email} | Tel: ${user.phone} | ID: ${user.nationalId}`;
+    institutionNameInput.value = settings.name;
+    adminRateInput.value = settings.weeklyRate;
+    calculatePreview();
+    renderSavings();
+  }
+
+  function renderSavings() {
+    const data = JSON.parse(localStorage.getItem("bizence_vault_records") || "[]");
+    if (data.length === 0) {
+      savingsList.innerHTML = '<p style="font-size:13px; color:#64748b;">Nta bubiko burakorwa.</p>';
+      adminReport.innerHTML = '<p style="font-size:13px; color:#64748b;">Nta mubitsi urabitsa.</p>';
+      return;
+    }
+
+    const html = data.map((item, idx) => `
+      <div class="saving-item">
+        <strong>Ububiko #${idx + 1}</strong> (${item.userPhone}) — Amezi: ${item.months} (${item.weeks} weeks)<br/>
+        Abikijwe: <strong>${formatFRW(item.principal)}</strong> | Inyungu: <strong>${formatFRW(item.interest)}</strong><br/>
+        Azabikuzwa: <strong>${formatFRW(item.total)}</strong><br/>
+        Itariki yo kubikuza: <strong>${item.unlockDate}</strong>
+      </div>
+    `).join("");
+
+    savingsList.innerHTML = html;
+    adminReport.innerHTML = html;
+  }
+
+  clientTabBtn.addEventListener("click", () => {
+    clientTabBtn.classList.add("active");
+    adminTabBtn.classList.remove("active");
+    clientView.classList.remove("hidden");
+    adminView.classList.add("hidden");
+  });
+
+  adminTabBtn.addEventListener("click", () => {
+    adminTabBtn.classList.add("active");
+    clientTabBtn.classList.remove("active");
+    adminView.classList.remove("hidden");
+    clientView.classList.add("hidden");
+    renderSavings();
+  });
+
+  updateSettingsBtn.addEventListener("click", () => {
+    const newSettings = {
+      name: institutionNameInput.value.trim() || "Ikigo cy'Imari",
+      weeklyRate: parseFloat(adminRateInput.value) || 0
+    };
+    localStorage.setItem("bizence_vault_settings", JSON.stringify(newSettings));
+    const user = JSON.parse(localStorage.getItem("bizence_vault_user") || "null");
+    if (user) renderDashboard(user);
+    alert("Igenamiterere ry'ikigo cy'imari ryabitswe!");
+  });
+
+  registerForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+    const user = {
+      email: document.getElementById("email").value.trim(),
+      phone: document.getElementById("phone").value.trim(),
+      nationalId: document.getElementById("nationalId").value.trim()
+    };
+    localStorage.setItem("bizence_vault_user", JSON.stringify(user));
+    renderDashboard(user);
+  });
+
+  saveBtn.addEventListener("click", function() {
+    const user = JSON.parse(localStorage.getItem("bizence_vault_user") || "{}");
+    const calc = calculatePreview();
+    if (calc.principal < 1000) {
+      alert("Shyiramo amafaranga nibura 1,000 FRW.");
+      return;
+    }
+    if (calc.months < 1) {
+      alert("Shyiramo igihe kiri nibura ukwezi 1.");
+      return;
+    }
+    if (!confirmLock.checked) {
+      alert("Banze wemeze akazu ko kubika amafaranga.");
+      return;
+    }
+
+    const unlockDateObj = new Date();
+    unlockDateObj.setDate(unlockDateObj.getDate() + calc.weeks * 7);
+
+    const record = {
+      userPhone: user.phone || "",
+      principal: calc.principal,
+      months: calc.months,
+      weeks: calc.weeks,
+      interest: calc.interest,
+      total: calc.total,
+      unlockDate: unlockDateObj.toLocaleDateString()
+    };
+
+    const existing = JSON.parse(localStorage.getItem("bizence_vault_records") || "[]");
+    existing.push(record);
+    localStorage.setItem("bizence_vault_records", JSON.stringify(existing));
+
+    confirmLock.checked = false;
+    amountInput.value = "";
+    calculatePreview();
+    renderSavings();
+    alert("Ububiko bwawe muri BiZence Vault bwemejwe!");
+  });
+
+  logoutBtn.addEventListener("click", function() {
+    localStorage.removeItem("bizence_vault_user");
+    dashboardSection.classList.add("hidden");
+    authSection.classList.remove("hidden");
+  });
+
+  const savedUser = JSON.parse(localStorage.getItem("bizence_vault_user") || "null");
+  if (savedUser) {
+    renderDashboard(savedUser);
+  }
+</script>
+
+</body>
+</html>
+
